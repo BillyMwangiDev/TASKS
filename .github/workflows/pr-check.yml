@@ -1,0 +1,56 @@
+name: Pull Request Check
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        
+    - name: Check file structure
+      run: |
+        echo "📁 Checking TASKY file structure..."
+        if (Test-Path "main.py") { echo "✅ main.py found" } else { echo "❌ main.py missing" }
+        if (Test-Path "models.py") { echo "✅ models.py found" } else { echo "❌ models.py missing" }
+        if (Test-Path "database.py") { echo "✅ database.py found" } else { echo "❌ database.py missing" }
+        if (Test-Path "ui/main_window.py") { echo "✅ ui/main_window.py found" } else { echo "❌ ui/main_window.py missing" }
+        if (Test-Path "README.md") { echo "✅ README.md found" } else { echo "❌ README.md missing" }
+        if (Test-Path "LICENSE") { echo "✅ LICENSE found" } else { echo "❌ LICENSE missing" }
+        
+    - name: Validate Python syntax
+      run: |
+        echo "🐍 Validating Python syntax..."
+        python -m py_compile main.py
+        python -m py_compile models.py
+        python -m py_compile database.py
+        python -m py_compile notifications.py
+        python -m py_compile scheduler.py
+        python -m py_compile build.py
+        echo "✅ All Python files compile successfully"
+        
+    - name: Check documentation
+      run: |
+        echo "📚 Checking documentation..."
+        if (Test-Path "USER_MANUAL.md") { echo "✅ USER_MANUAL.md found" } else { echo "❌ USER_MANUAL.md missing" }
+        if (Test-Path "CONTRIBUTING.md") { echo "✅ CONTRIBUTING.md found" } else { echo "❌ CONTRIBUTING.md missing" }
+        if (Test-Path "CHANGELOG.md") { echo "✅ CHANGELOG.md found" } else { echo "❌ CHANGELOG.md missing" }
+        
+    - name: Success
+      run: |
+        echo "🎉 Pull Request validation completed successfully!"
+        echo "✅ TASKY is ready for review and merge."

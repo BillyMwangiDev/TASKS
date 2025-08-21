@@ -1,0 +1,18 @@
+TASKY v1.0.0
+============
+
+Features:
+- Task Management (Create, Edit, Delete, Complete)
+- Time Tracking
+- Smart Notifications
+- Dark/Light Themes
+- Real-time Search
+- Live Statistics
+- Keyboard Shortcuts
+
+System Requirements:
+- Windows 10/11
+- 100MB RAM
+- 50MB disk space
+
+Made with ❤️ by the TASKY Team

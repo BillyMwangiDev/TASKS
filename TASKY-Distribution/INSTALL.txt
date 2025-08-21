@@ -1,0 +1,14 @@
+TASKY - Installation Instructions
+=====================================
+
+1. Extract this ZIP file to any folder
+2. Double-click TASKY.exe to run
+3. No Python installation required!
+4. No additional dependencies needed!
+
+Note: Windows Defender may show a warning because this is a custom application.
+Click "More info" and then "Run anyway" to use TASKY.
+
+For help, read USER_MANUAL.md
+
+Enjoy TASKY! 🎉

@@ -1,0 +1,65 @@
+name: Build TASKY
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        
+    - name: Build executable
+      run: python build.py
+      
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: TASKY-Windows
+        path: |
+          TASKY-Distribution/
+          TASKY-v1.0.0-Windows.zip
+        retention-days: 30
+        
+    - name: Create Release
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          TASKY-v1.0.0-Windows.zip
+        body: |
+          ## 🎉 TASKY v${{ github.ref_name }} Released!
+          
+          ### What's New:
+          - Standalone Windows executable
+          - No Python installation required
+          - Complete task management solution
+          
+          ### Installation:
+          1. Download and extract the ZIP file
+          2. Double-click TASKY.exe to run
+          3. Enjoy! 🚀
+          
+          ### Features:
+          - Task Management (Create, Edit, Delete, Complete)
+          - Time Tracking
+          - Smart Notifications
+          - Dark/Light Themes
+          - Real-time Search
+          - Live Statistics
+          - Keyboard Shortcuts
