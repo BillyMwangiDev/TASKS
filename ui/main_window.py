@@ -178,15 +178,21 @@ class MainWindow(QMainWindow):
         self.track_button.setMinimumWidth(55)  # Even smaller width
         button_layout.addWidget(self.track_button)
         
-        # Refresh button
-        self.refresh_button = QPushButton("🔄")
-        self.refresh_button.setProperty("class", "secondary")
-        self.refresh_button.setMinimumHeight(24)  # Even smaller height
-        self.refresh_button.setMinimumWidth(28)  # Even smaller width - icon only
-        self.refresh_button.setToolTip("Refresh tasks (Right-click for notification options)")
-        self.refresh_button.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
-        self.refresh_button.customContextMenuRequested.connect(self.show_refresh_context_menu)
-        button_layout.addWidget(self.refresh_button)
+        # Add test notification button for debugging
+        test_notification_button = QPushButton("🔔 Test Notification")
+        test_notification_button.setProperty("class", "secondary")
+        test_notification_button.setToolTip("Test the notification system")
+        test_notification_button.clicked.connect(self.test_notification_system)
+        test_notification_button.setFixedHeight(32)
+        button_layout.addWidget(test_notification_button)
+        
+        # Add manual refresh button
+        refresh_button = QPushButton("🔄 Refresh")
+        refresh_button.setProperty("class", "secondary")
+        refresh_button.setToolTip("Refresh task list")
+        refresh_button.clicked.connect(self.load_tasks)
+        refresh_button.setFixedHeight(32)
+        button_layout.addWidget(refresh_button)
         
         # Task table - cleaner design like sticky notes
         self.task_table = QTableWidget()
@@ -719,10 +725,40 @@ class MainWindow(QMainWindow):
         # Show the context menu
         context_menu.exec(self.refresh_button.mapToGlobal(position))
     
+    def test_notification_system(self):
+        """Manually trigger a test notification."""
+        print("🔔 Manually triggering a test notification...")
+        self.notification_manager.show_test_notification(
+            "Test Notification",
+            "This is a test notification to ensure your notification system is working correctly.",
+            "info"
+        )
+        self.statusBar().showMessage("Test notification sent.")
+    
     def closeEvent(self, event):
-        """Handle window close event."""
+        """Handle application close event."""
         try:
-            self.task_scheduler.stop()
+            print("🛑 Application closing, cleaning up...")
+            
+            # Stop all ringing notifications
+            if hasattr(self, 'notification_manager'):
+                self.notification_manager.stop_all_ringing()
+                print("✅ Stopped all ringing notifications")
+            
+            # Stop the task scheduler
+            if hasattr(self, 'task_scheduler'):
+                self.task_scheduler.stop()
+                print("✅ Stopped task scheduler")
+            
+            # Close database connection
+            if hasattr(self, 'db_manager'):
+                self.db_manager.close()
+                print("✅ Closed database connection")
+            
+            print("✅ Cleanup completed")
+            
         except Exception as e:
-            print(f"Error stopping scheduler: {e}")
+            print(f"❌ Error during cleanup: {e}")
+        
+        # Accept the close event
         event.accept()

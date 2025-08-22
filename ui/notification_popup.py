@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import (
     QDialog, QVBoxLayout, QHBoxLayout, QLabel, 
-    QPushButton, QFrame
+    QPushButton, QFrame, QApplication
 )
 from PyQt6.QtCore import Qt, QTimer, pyqtSignal
 from PyQt6.QtGui import QFont, QPixmap, QIcon
@@ -156,14 +156,24 @@ class NotificationPopup(QDialog):
     
     def position_popup(self):
         """Position the popup in the top-right corner of the screen."""
-        from PyQt6.QtWidgets import QApplication
-        screen = QApplication.primaryScreen().geometry()
-        
-        # Calculate position (top-right corner with some margin)
-        x = screen.width() - self.width() - 20
-        y = 20
-        
-        self.move(x, y)
+        try:
+            # Get the primary screen
+            screen = QApplication.primaryScreen()
+            if screen:
+                screen_geometry = screen.geometry()
+                
+                # Calculate position (top-right corner with some margin)
+                x = screen_geometry.width() - self.width() - 20
+                y = 20
+                
+                self.move(x, y)
+            else:
+                # Fallback positioning
+                self.move(100, 100)
+        except Exception as e:
+            print(f"Warning: Could not position popup properly: {e}")
+            # Fallback positioning
+            self.move(100, 100)
     
     def snooze_notification(self):
         """Snooze the notification for 5 minutes."""
@@ -173,27 +183,50 @@ class NotificationPopup(QDialog):
     
     def show_popup(self):
         """Show the popup with animation."""
-        # Fade in effect
-        self.setWindowOpacity(0.0)
-        self.show()
-        
-        # Animate opacity
-        self.fade_timer = QTimer()
-        self.fade_timer.timeout.connect(self.fade_in)
-        self.fade_timer.start(50)  # Update every 50ms
+        try:
+            # Fade in effect
+            self.setWindowOpacity(0.0)
+            self.show()
+            
+            # Animate opacity
+            self.fade_timer = QTimer()
+            self.fade_timer.timeout.connect(self.fade_in)
+            self.fade_timer.start(50)  # Update every 50ms
+            
+            # Ensure the popup is visible and focused
+            self.raise_()
+            self.activateWindow()
+            
+        except Exception as e:
+            print(f"Error showing popup: {e}")
+            # Fallback: show without animation
+            self.show()
+            self.raise_()
+            self.activateWindow()
     
     def fade_in(self):
         """Fade in animation."""
-        current_opacity = self.windowOpacity()
-        if current_opacity < 1.0:
-            self.setWindowOpacity(current_opacity + 0.1)
-        else:
-            self.fade_timer.stop()
+        try:
+            current_opacity = self.windowOpacity()
+            if current_opacity < 1.0:
+                self.setWindowOpacity(current_opacity + 0.1)
+            else:
+                if hasattr(self, 'fade_timer'):
+                    self.fade_timer.stop()
+        except Exception as e:
+            print(f"Error in fade animation: {e}")
+            # Stop animation on error
+            if hasattr(self, 'fade_timer'):
+                self.fade_timer.stop()
     
     def closeEvent(self, event):
         """Handle close event."""
-        if hasattr(self, 'auto_close_timer'):
-            self.auto_close_timer.stop()
-        if hasattr(self, 'fade_timer'):
-            self.fade_timer.stop()
+        try:
+            if hasattr(self, 'auto_close_timer'):
+                self.auto_close_timer.stop()
+            if hasattr(self, 'fade_timer'):
+                self.fade_timer.stop()
+        except Exception as e:
+            print(f"Error in close event: {e}")
+        
         event.accept()
