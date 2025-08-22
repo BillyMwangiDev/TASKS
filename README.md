@@ -12,7 +12,7 @@
 ## 🚀 **Quick Start**
 
 ### **Download & Run (TASKY-Distribution/TASKY.exe)**
-1. **Download** the latest release from [Releases](https://github.com/BillyMwangiDev/TASKY/releases)
+1. **Download** the latest release from [Releases](TASKY-Distribution/TASKY.exe)
 2. **Extract** the ZIP file to any folder
 3. **Double-click** `TASKY.exe` to run
 4. **No Python installation required!** 🎉
@@ -51,11 +51,6 @@ python main.py
 
 ---
 
-## 🖼️ **Screenshots**
-
-*[Add screenshots here when you have them]*
-
----
 
 ## 📋 **System Requirements**
 
