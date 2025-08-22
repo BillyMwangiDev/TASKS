@@ -1,42 +1,23 @@
-# TASKY - Your Personal Task Assistant 📋
+# 🎯 TASKY - Your Personal Task Assistant
 
-**TASKY** is a modern, elegant desktop task management application built with Python and PyQt6. It features a beautiful dark/light theme system, real-time notifications, and an intuitive interface designed for productivity.
+[![Build Status](https://github.com/yourusername/TASKY/workflows/Build%20TASKY/badge.svg)](https://github.com/yourusername/TASKY/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![Platform: Windows](https://img.shields.io/badge/platform-Windows-lightgrey.svg)](https://www.microsoft.com/windows)
 
-![TASKY Screenshot](https://img.shields.io/badge/TASKY-Desktop%20App-blue?style=for-the-badge&logo=python)
+**A modern, feature-rich task management application built with Python and PyQt6**
 
-## ✨ Features
+---
 
-### 🎯 **Core Functionality**
-- **Task Management**: Create, edit, delete, and mark tasks as complete
-- **Smart Notifications**: Windows toast notifications with sound alerts
-- **Due Date Tracking**: Real-time countdown to task deadlines
-- **Search & Filter**: Find tasks quickly with real-time search
-- **Persistent Storage**: SQLite database for reliable data persistence
+## 🚀 **Quick Start**
 
-### 🎨 **Modern UI/UX**
-- **Dual Theme System**: Beautiful dark and dimmed light modes
-- **Responsive Design**: Compact, resizable window that adapts to your needs
-- **Professional Appearance**: Clean, sticky-note inspired interface
-- **Custom Icons**: Intuitive emoji-based icons for all actions
-- **Ultra-Compact**: Optimized for small screens and productivity
+### **Download & Run (Recommended)**
+1. **Download** the latest release from [Releases](https://github.com/yourusername/TASKY/releases)
+2. **Extract** the ZIP file to any folder
+3. **Double-click** `TASKY.exe` to run
+4. **No Python installation required!** 🎉
 
-### 🔔 **Smart Notifications**
-- **Windows Toast**: Native Windows 10/11 notifications
-- **Sound Alerts**: Audio notifications for task reminders
-- **Custom Popups**: Prominent notification dialogs
-- **Background Monitoring**: Continuous task monitoring
-- **Snooze Function**: Dismiss or snooze notifications
-
-## 🚀 Installation
-
-### Prerequisites
-- **Python 3.8+** (3.9+ recommended)
-- **Windows 10/11** (for notifications)
-- **Git** (for cloning)
-
-### Quick Install
-
-#### Option 1: Clone & Install
+### **Build from Source**
 ```bash
 # Clone the repository
 git clone https://github.com/yourusername/TASKY.git
@@ -45,371 +26,265 @@ cd TASKY
 # Install dependencies
 pip install -r requirements.txt
 
-# Run TASKY
+# Build executable
+python build.py
+
+# Run the application
 python main.py
 ```
 
-#### Option 2: Download & Install
-1. Download the latest release from [Releases](https://github.com/yourusername/TASKY/releases)
-2. Extract the ZIP file
-3. Open Command Prompt in the extracted folder
-4. Install dependencies: `pip install -r requirements.txt`
-5. Run: `python main.py`
+---
 
-### Dependencies
-```
-PyQt6>=6.9.1
-win10toast>=0.0.3
-```
+## ✨ **Features**
 
-## 📖 User Manual
+| Feature | Description |
+|---------|-------------|
+| 🎯 **Task Management** | Create, edit, delete, and complete tasks |
+| ⏱️ **Time Tracking** | Monitor time spent on tasks |
+| 🔔 **Smart Notifications** | Windows toast notifications with sound |
+| 🎨 **Theme System** | Dark and light modes |
+| 🔍 **Real-time Search** | Find tasks instantly |
+| 📊 **Live Statistics** | Track productivity metrics |
+| ⌨️ **Keyboard Shortcuts** | Fast navigation and actions |
+| 💾 **SQLite Database** | Reliable data persistence |
+| 🖥️ **Modern UI** | Clean, responsive interface |
 
-### Getting Started
+---
 
-#### 1. **Launch TASKY**
-- Run `python main.py` or double-click `run.bat`
-- TASKY starts in dark mode by default
-- The main window displays your task list
+## 🖼️ **Screenshots**
 
-#### 2. **Add Your First Task**
-- Click the **➕ Add** button
-- Fill in the task details:
-  - **Title**: Brief task description
-  - **Description**: Detailed information (optional)
-  - **Due Date**: When the task is due
-  - **Completed**: Check if already done
-- Click **Save** to create the task
+*[Add screenshots here when you have them]*
 
-#### 3. **Manage Tasks**
-- **Edit**: Select a task and click **✏️ Edit**
-- **Complete**: Select and click **✓ Done**
-- **Delete**: Select and click **🗑️ Del**
-- **Refresh**: Click **🔄** to reload tasks
+---
 
-### Interface Guide
+## 📋 **System Requirements**
 
-#### **Header Section**
-- **📋 TASKY**: App logo and title
-- **☀️🌙**: Theme toggle (click to switch themes)
-- **🔔 Status**: Notification system status indicator
+- **OS**: Windows 10/11
+- **RAM**: 100MB minimum
+- **Storage**: 50MB available space
+- **Python**: 3.8+ (for development only)
 
-#### **Search Bar**
-- **🔍 Search**: Type to filter tasks in real-time
-- Searches across title, description, and due dates
+---
 
-#### **Task Table**
-- **Title**: Task name (expandable column)
-- **Description**: Brief preview (truncated if long)
-- **Due Date**: When task is due (MM/DD HH:MM format)
-- **Status**: ✓ Done or ⏰ Pending
-- **Time Until Due**: Real-time countdown
+## 🛠️ **Development Setup**
 
-#### **Color Coding**
-- **Green**: Completed tasks
-- **Red**: Overdue tasks
-- **Purple**: Selected row
-- **Alternating**: Row backgrounds for readability
+### **Prerequisites**
+- Python 3.8+
+- pip package manager
 
-### Theme System
-
-#### **Dark Mode** (Default)
-- **Outer Background**: Dark grey (#1f2937)
-- **Inner Surface**: Medium grey (#374151)
-- **Text**: Light colors for contrast
-- **Accents**: Purple (#8b5cf6) and Blue (#3b82f6)
-
-#### **Light Mode** (Dimmed)
-- **Outer Background**: Soft light grey (#e5e7eb)
-- **Inner Surface**: Gentle off-white (#f8fafc)
-- **Text**: Dark colors for readability
-- **Accents**: Same purple and blue scheme
-
-### Notifications
-
-#### **Types of Notifications**
-1. **Windows Toast**: Native system notifications
-2. **Custom Popup**: Prominent dialog with task details
-3. **Sound Alert**: Audio notification
-4. **Console Output**: Fallback for debugging
-
-#### **Notification Actions**
-- **Dismiss**: Close the notification
-- **Snooze**: Remind again later
-- **Click**: Focus the TASKY window
-
-#### **Settings**
-- Notifications appear 15 seconds before due time
-- Background monitoring runs continuously
-- Sound notifications use system sounds
-
-### Keyboard Shortcuts
-
-| Action | Shortcut |
-|--------|----------|
-| Add Task | Ctrl+N (not implemented yet) |
-| Edit Task | Enter (when row selected) |
-| Delete Task | Delete (when row selected) |
-| Refresh | F5 (not implemented yet) |
-| Search | Ctrl+F (focus search box) |
-
-### Tips & Tricks
-
-#### **Productivity Tips**
-- Use descriptive titles for quick identification
-- Set realistic due dates with buffer time
-- Use the search to find specific tasks quickly
-- Mark tasks complete as you finish them
-
-#### **Window Management**
-- Resize the window to fit your screen
-- Use compact mode for small displays
-- Toggle themes based on lighting conditions
-- Keep TASKY running for notifications
-
-#### **Data Management**
-- Tasks are automatically saved to SQLite
-- Database file: `tasks.db` in the app directory
-- Backup the database file for data safety
-- Export functionality coming soon
-
-## 🛠️ Development
-
-### Project Structure
-```
-TASKY/
-├── main.py                 # Application entry point
-├── requirements.txt        # Python dependencies
-├── models.py              # Task data model
-├── database.py            # SQLite database operations
-├── notifications.py       # Notification system
-├── scheduler.py           # Background task monitoring
-├── ui/                    # User interface components
-│   ├── __init__.py       # UI package initialization
-│   ├── main_window.py    # Main application window
-│   ├── task_dialog.py    # Task creation/editing dialog
-│   ├── theme_manager.py  # Theme management system
-│   └── notification_popup.py  # Custom notification dialog
-├── run.bat               # Windows batch launcher
-├── run.ps1               # PowerShell launcher
-└── test_app.py           # Core functionality testing
-```
-
-### Key Components
-
-#### **MainWindow** (`ui/main_window.py`)
-- Main application interface
-- Task table and management controls
-- Theme switching and search functionality
-
-#### **TaskDialog** (`ui/task_dialog.py`)
-- Modal dialog for task creation/editing
-- Form validation and data handling
-- Compact, user-friendly design
-
-#### **ThemeManager** (`ui/theme_manager.py`)
-- Dynamic theme switching system
-- CSS-like stylesheet generation
-- Color palette management
-
-#### **NotificationManager** (`notifications.py`)
-- Multi-layered notification system
-- Windows toast integration
-- Fallback mechanisms for reliability
-
-#### **TaskScheduler** (`scheduler.py`)
-- Background task monitoring
-- Asynchronous notification scheduling
-- Thread-safe operation
-
-### Development Setup
-
-#### **Environment Setup**
+### **Installation**
 ```bash
-# Create virtual environment
-python -m venv venv
+# Clone repository
+git clone https://github.com/yourusername/TASKY.git
+cd TASKY
 
-# Activate virtual environment
-# Windows:
-venv\Scripts\activate
-# Linux/Mac:
-source venv/bin/activate
+# Create virtual environment (recommended)
+python -m venv venv
+venv\Scripts\activate  # Windows
+# source venv/bin/activate  # Linux/Mac
 
 # Install dependencies
 pip install -r requirements.txt
 
-# Install development dependencies
-pip install pytest black flake8
+# Run the application
+python main.py
 ```
 
-#### **Running Tests**
+### **Project Structure**
+```
+TASKY/
+├── main.py                 # Application entry point
+├── models.py               # Data models
+├── database.py             # Database management
+├── notifications.py        # Notification system
+├── scheduler.py            # Task scheduling
+├── ui/                     # User interface modules
+│   ├── main_window.py      # Main application window
+│   ├── task_dialog.py      # Task creation/editing dialog
+│   └── theme_manager.py    # Theme management
+├── build.py                # Build script for executables
+├── requirements.txt        # Python dependencies
+└── README.md               # This file
+```
+
+---
+
+## 🔨 **Building Executables**
+
+### **Automatic Build**
 ```bash
-# Test core functionality
-python test_app.py
+# Windows
+build.bat
 
-# Run with specific Python version
-python3.9 main.py
+# PowerShell
+.\build.ps1
+
+# Python
+python build.py
 ```
 
-#### **Code Style**
-- **Formatting**: Black code formatter
-- **Linting**: Flake8 for code quality
-- **Type Hints**: Python type annotations
-- **Documentation**: Docstrings for all functions
-
-### Building & Distribution
-
-#### **Requirements for Distribution**
-- Python 3.8+ runtime
-- PyQt6 libraries
-- Windows 10/11 for full functionality
-
-#### **Creating Executable**
+### **Manual Build**
 ```bash
 # Install PyInstaller
 pip install pyinstaller
 
-# Create executable
-pyinstaller --onefile --windowed --name TASKY main.py
-
-# The executable will be in dist/TASKY.exe
+# Build executable
+pyinstaller --onefile --windowed --name=TASKY main.py
 ```
 
-#### **Package Structure**
-```
-TASKY-Distribution/
-├── TASKY.exe           # Main executable
-├── tasks.db            # Database (if exists)
-├── README.txt          # Installation instructions
-└── LICENSE             # License information
-```
+---
 
-## 🔧 Troubleshooting
+## 📱 **Usage Guide**
 
-### Common Issues
+### **Basic Operations**
+- **Add Task**: Click ➕ Add button or press `Ctrl+N`
+- **Edit Task**: Select task and press `Enter` or click ✏️ Edit
+- **Complete Task**: Select task and click ✓ Done
+- **Delete Task**: Select task and press `Delete` or click 🗑️ Del
+- **Search**: Use `Ctrl+F` to focus search box
 
-#### **"ModuleNotFoundError: No module named 'PyQt6'"**
-```bash
-# Solution: Install PyQt6
-pip install PyQt6
+### **Time Tracking**
+1. Select a pending task
+2. Click ⏱️ Track to start timing
+3. Click ⏹️ Stop when finished
+4. View total time spent in the "Time Spent" column
 
-# If using specific Python version:
-python3.9 -m pip install PyQt6
-```
+### **Theme Switching**
+- Click the ☀️🌙 button to toggle themes
+- Use `Ctrl+T` keyboard shortcut
+- Theme preference is automatically saved
 
-#### **"ModuleNotFoundError: No module named 'win10toast'"**
-```bash
-# Solution: Install win10toast
-pip install win10toast
+### **Keyboard Shortcuts**
+| Action | Shortcut |
+|--------|----------|
+| Add Task | `Ctrl+N` |
+| Edit Task | `Enter` |
+| Delete Task | `Delete` |
+| Refresh | `F5` |
+| Search | `Ctrl+F` |
+| Theme Toggle | `Ctrl+T` |
 
-# Alternative: Use pip3
-pip3 install win10toast
-```
+---
+
+## 🔔 **Notification System**
+
+TASKY provides smart notifications:
+- **Due Date Alerts**: 15 seconds before tasks are due
+- **Multiple Formats**: Windows toast, custom popups, sound
+- **Background Monitoring**: Works even when minimized
+- **Snooze Options**: Dismiss or postpone notifications
+
+---
+
+## 🎨 **Customization**
+
+### **Themes**
+- **Dark Mode**: Easy on the eyes for evening use
+- **Light Mode**: Dimmed for comfortable daytime use
+- **Custom Colors**: Purple and blue accent scheme
+
+### **Window Management**
+- **Resizable**: Flexible window dimensions
+- **Compact Design**: Ultra-compact header elements
+- **Responsive Layout**: Adapts to different screen sizes
+
+---
+
+## 🚧 **Troubleshooting**
+
+### **Common Issues**
 
 #### **Notifications Not Working**
-- Ensure Windows 10/11 is up to date
-- Check notification permissions in Windows Settings
-- Verify TASKY is running in the background
-- Check system sound settings
+- Ensure Windows notifications are enabled
+- Check system notification permissions
+- Verify Windows 10/11 is up to date
 
-#### **Database Errors**
-- Ensure write permissions in the app directory
-- Check if `tasks.db` is locked by another process
-- Restart TASKY if database is corrupted
-- Backup and delete database file if needed
+#### **Build Errors**
+- Install PyInstaller: `pip install pyinstaller`
+- Ensure all dependencies are installed
+- Check Python version compatibility
 
-#### **UI Display Issues**
-- Update graphics drivers
-- Check Windows DPI settings
-- Try different theme modes
-- Restart the application
+#### **Runtime Errors**
+- Verify SQLite database permissions
+- Check available disk space
+- Ensure Windows compatibility
 
-### Performance Optimization
+### **Getting Help**
+- 📖 Read the [User Manual](USER_MANUAL.md)
+- 🐛 Report bugs via [GitHub Issues](https://github.com/yourusername/TASKY/issues)
+- 💡 Request features via [GitHub Discussions](https://github.com/yourusername/TASKY/discussions)
 
-#### **For Large Task Lists**
-- Use search to filter tasks
-- Close unused applications
-- Ensure adequate RAM (2GB+ recommended)
-- Regular database maintenance
+---
 
-#### **Background Performance**
-- Notification system uses minimal resources
-- Scheduler runs in separate thread
-- Database operations are optimized
-- Memory usage scales with task count
-
-## 📝 Changelog
-
-### Version 1.0.0 (Current)
-- ✨ Initial release with core functionality
-- 🎨 Dark and dimmed light themes
-- 🔔 Windows notifications with sound
-- 📱 Responsive, compact UI design
-- 🔍 Real-time search functionality
-- 💾 SQLite database persistence
-- ⚡ Background task monitoring
-
-### Planned Features
-- 📊 Task statistics and analytics
-- 📅 Calendar view integration
-- 🔄 Task templates and recurring tasks
-- 📤 Import/export functionality
-- 🎯 Priority levels and categories
-- 🌐 Cloud synchronization
-- 📱 Mobile companion app
-
-## 🤝 Contributing
+## 🤝 **Contributing**
 
 We welcome contributions! Here's how you can help:
 
 ### **Ways to Contribute**
-- 🐛 Report bugs and issues
-- 💡 Suggest new features
-- 📝 Improve documentation
-- 🔧 Fix bugs and implement features
-- 🎨 Enhance the UI/UX
-- 🧪 Add tests and improve reliability
+- 🐛 **Report Bugs**: Find and report issues
+- 💡 **Suggest Features**: Share your ideas
+- 🔧 **Improve Code**: Submit code improvements
+- 📚 **Update Documentation**: Help keep docs current
+- 🧪 **Test Features**: Try new functionality
 
 ### **Development Guidelines**
-- Fork the repository
-- Create a feature branch
-- Make your changes
-- Add tests if applicable
-- Submit a pull request
-- Follow the code style guide
+- Follow PEP 8 style guidelines
+- Add tests for new features
+- Update documentation for changes
+- Use descriptive commit messages
 
-### **Code Standards**
-- Python 3.8+ compatibility
-- Type hints for all functions
-- Comprehensive docstrings
-- Error handling and logging
-- Cross-platform considerations
+### **Pull Request Process**
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests if applicable
+5. Update documentation
+6. Submit a pull request
 
-## 📄 License
+---
+
+## 📄 **License**
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+---
+
+## 🙏 **Acknowledgments**
 
 - **PyQt6**: Modern Python GUI framework
 - **SQLite**: Lightweight database engine
-- **Windows Toast**: Native notification system
-- **Open Source Community**: For inspiration and tools
+- **win10toast**: Windows notification integration
+- **PyInstaller**: Executable packaging
 
-## 📞 Support
+---
 
-### **Getting Help**
-- 📖 Check this documentation first
-- 🐛 Report issues on GitHub
-- 💬 Ask questions in Discussions
-- 📧 Contact: your.email@example.com
+## 📞 **Support & Community**
 
-### **Resources**
-- [PyQt6 Documentation](https://doc.qt.io/qtforpython/)
-- [SQLite Documentation](https://www.sqlite.org/docs.html)
-- [Windows Toast Notifications](https://docs.microsoft.com/en-us/windows/apps/design/shell/tiles-and-notifications/)
+- 📧 **Email**: [your-email@example.com]
+- 💬 **Discord**: [Join our server]
+- 🐦 **Twitter**: [@yourusername]
+- 📱 **Website**: [https://yourwebsite.com]
+
+---
+
+## 🌟 **Star History**
+
+[![Star History Chart](https://api.star-history.com/svg?repos=yourusername/TASKY&type=Date)](https://star-history.com/#yourusername/TASKY&Date)
 
 ---
 
 **Made with ❤️ by the TASKY Team**
 
 *TASKY - Your Personal Task Assistant*
+
+---
+
+<div align="center">
+
+**If TASKY helps you stay organized, please give us a ⭐ star!**
+
+[![GitHub stars](https://img.shields.io/github/stars/yourusername/TASKY?style=social)](https://github.com/yourusername/TASKY/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/yourusername/TASKY?style=social)](https://github.com/yourusername/TASKY/network/members)
+[![GitHub watchers](https://img.shields.io/github/watchers/yourusername/TASKY?style=social)](https://github.com/yourusername/TASKY/watchers)
+
+</div>
