@@ -12,7 +12,7 @@
 ## 🚀 **Quick Start**
 
 ### **Download & Run (Recommended)**
-1. **Download** the latest release from [Releases](https://github.com/yourusername/TASKY/releases)
+1. **Download** the latest release from [Releases](https://github.com/BillyMwangiDev/TASKY/releases)
 2. **Extract** the ZIP file to any folder
 3. **Double-click** `TASKY.exe` to run
 4. **No Python installation required!** 🎉
@@ -72,23 +72,7 @@ python main.py
 - Python 3.8+
 - pip package manager
 
-### **Installation**
-```bash
-# Clone repository
-git clone https://github.com/yourusername/TASKY.git
-cd TASKY
 
-# Create virtual environment (recommended)
-python -m venv venv
-venv\Scripts\activate  # Windows
-# source venv/bin/activate  # Linux/Mac
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Run the application
-python main.py
-```
 
 ### **Project Structure**
 ```
@@ -260,10 +244,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 **Support & Community**
 
-- 📧 **Email**: [your-email@example.com]
-- 💬 **Discord**: [Join our server]
-- 🐦 **Twitter**: [@yourusername]
-- 📱 **Website**: [https://yourwebsite.com]
+- 📧 **Email**: [billymwangi200@gmail.com]
+
 
 ---
 
