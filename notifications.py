@@ -2,8 +2,15 @@ import asyncio
 from datetime import datetime
 from typing import Set
 from models import Task
-import winsound
 import os
+
+# Try to import winsound, with better fallback handling
+try:
+    import winsound
+    WINSOUND_AVAILABLE = True
+except ImportError:
+    WINSOUND_AVAILABLE = False
+    print("Warning: winsound not available. Using alternative sound methods.")
 
 # Try to import win10toast, fallback to console notifications if not available
 try:
@@ -47,21 +54,52 @@ class NotificationManager:
     
     def _play_notification_sound(self):
         """Play a notification sound to alert the user."""
-        try:
-            # Play Windows notification sound (SystemAsterisk)
-            winsound.MessageBeep(winsound.MB_ICONASTERISK)
-        except Exception as e:
+        sound_played = False
+        
+        # Method 1: Try winsound if available
+        if WINSOUND_AVAILABLE:
             try:
-                # Fallback to simple beep
-                winsound.Beep(800, 500)  # 800Hz for 500ms
-            except Exception:
-                # If all else fails, just print a sound indicator
+                winsound.MessageBeep(winsound.MB_ICONASTERISK)
+                sound_played = True
+                print("🔊 Played notification sound (winsound)")
+            except Exception as e:
+                print(f"winsound.MessageBeep failed: {e}")
+                try:
+                    winsound.Beep(800, 500)  # 800Hz for 500ms
+                    sound_played = True
+                    print("🔊 Played notification sound (winsound beep)")
+                except Exception as e2:
+                    print(f"winsound.Beep failed: {e2}")
+        
+        # Method 2: Try system command for sound
+        if not sound_played:
+            try:
+                os.system('powershell -c "[console]::beep(800,500)"')
+                sound_played = True
+                print("🔊 Played notification sound (PowerShell)")
+            except Exception as e:
+                print(f"PowerShell beep failed: {e}")
+        
+        # Method 3: Try ASCII bell character
+        if not sound_played:
+            try:
                 print("\a")  # ASCII bell character
-                print("🔔 *NOTIFICATION SOUND* 🔔")
+                sound_played = True
+                print("🔊 Played notification sound (ASCII bell)")
+            except Exception as e:
+                print(f"ASCII bell failed: {e}")
+        
+        # Method 4: Visual indicator if all sound methods fail
+        if not sound_played:
+            print("🔔 *NOTIFICATION SOUND* 🔔")
+            print("🔔 *NOTIFICATION SOUND* 🔔")
+            print("🔔 *NOTIFICATION SOUND* 🔔")
     
     def show_task_notification(self, task: Task) -> bool:
         """Show a notification for a due task."""
         try:
+            print(f"\n🔔 Attempting to show notification for task: {task.title}")
+            
             # Play notification sound first
             self._play_notification_sound()
             
@@ -75,9 +113,9 @@ class NotificationManager:
                         self.main_window
                     )
                     popup.show_popup()
-                    print(f"Custom popup shown for task: {task.title}")
+                    print(f"✅ Custom popup shown for task: {task.title}")
                 except Exception as e:
-                    print(f"Custom popup failed: {e}")
+                    print(f"❌ Custom popup failed: {e}")
                     # Fall back to other notification methods
             
             # Try Windows toast notification
@@ -99,6 +137,7 @@ class NotificationManager:
                             threaded=True,  # Don't block the main thread
                             icon_path=None  # Use default icon
                         )
+                        print(f"✅ Windows toast notification shown for task: {task.title}")
                     except TypeError:
                         # Fallback for older win10toast versions
                         self.toaster.show_toast(
@@ -107,26 +146,29 @@ class NotificationManager:
                             duration=15,
                             threaded=True
                         )
+                        print(f"✅ Windows toast notification shown for task: {task.title} (fallback)")
                 except Exception as e:
-                    print(f"Windows toast notification failed: {e}")
+                    print(f"❌ Windows toast notification failed: {e}")
             
             # Always show console notification as backup
             self._show_console_notification(task)
             
             # Mark this task as notified
             self.notified_tasks.add(task.id)
+            print(f"✅ Task {task.title} marked as notified")
             return True
             
         except Exception as e:
-            print(f"Failed to show notification for task {task.id}: {e}")
+            print(f"❌ Failed to show notification for task {task.id}: {e}")
             # Try console notification as fallback
             try:
                 self._play_notification_sound()
                 self._show_console_notification(task)
                 self.notified_tasks.add(task.id)
+                print(f"✅ Fallback notification succeeded for task: {task.title}")
                 return True
             except Exception as fallback_error:
-                print(f"Fallback notification also failed: {fallback_error}")
+                print(f"❌ Fallback notification also failed: {fallback_error}")
                 return False
     
     def _show_console_notification(self, task: Task):
@@ -155,19 +197,31 @@ class NotificationManager:
     
     async def check_and_notify_due_tasks(self, get_due_tasks_func):
         """Check for due tasks and show notifications."""
+        print("🔄 Starting notification check loop...")
+        check_count = 0
+        
         while True:
             try:
+                check_count += 1
+                print(f"🔄 Check #{check_count}: Checking for due tasks...")
+                
                 # Get all due tasks
                 due_tasks = get_due_tasks_func()
+                print(f"📋 Found {len(due_tasks)} due tasks")
                 
                 # Show notifications for tasks that haven't been notified yet
                 for task in due_tasks:
                     if not self.is_task_notified(task):
+                        print(f"🔔 Task '{task.title}' is due and needs notification")
                         self.show_task_notification(task)
+                    else:
+                        print(f"✅ Task '{task.title}' already notified")
                 
                 # Wait for 1 minute before checking again
+                print(f"⏰ Waiting 60 seconds before next check...")
                 await asyncio.sleep(60)
                 
             except Exception as e:
-                print(f"Error in notification check loop: {e}")
+                print(f"❌ Error in notification check loop: {e}")
+                print("⏰ Continuing in 60 seconds despite error...")
                 await asyncio.sleep(60)  # Continue checking even if there's an error

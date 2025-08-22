@@ -1,6 +1,6 @@
 # 🎯 TASKY - Your Personal Task Assistant
 
-[![Build Status](https://github.com/yourusername/TASKY/workflows/Build%20TASKY/badge.svg)](https://github.com/yourusername/TASKY/actions)
+[![Build Status](https://github.com/yourusername/TASKY/workflows/Build%20TASKY/badge.svg)](https://github.com/yourusername/TASKY/actions) [![Test Status](https://github.com/yourusername/TASKY/workflows/Test%20TASKY/badge.svg)](https://github.com/yourusername/TASKY/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![Platform: Windows](https://img.shields.io/badge/platform-Windows-lightgrey.svg)](https://www.microsoft.com/windows)
@@ -11,8 +11,8 @@
 
 ## 🚀 **Quick Start**
 
-### **Download & Run (Recommended)**
-1. **Download** the latest release from [Releases](https://github.com/yourusername/TASKY/releases)
+### **Download & Run (TASKY-Distribution/TASKY.exe)**
+1. **Download** the latest release from [Releases](TASKY-Distribution/TASKY.exe)
 2. **Extract** the ZIP file to any folder
 3. **Double-click** `TASKY.exe` to run
 4. **No Python installation required!** 🎉
@@ -51,11 +51,6 @@ python main.py
 
 ---
 
-## 🖼️ **Screenshots**
-
-*[Add screenshots here when you have them]*
-
----
 
 ## 📋 **System Requirements**
 
@@ -72,23 +67,7 @@ python main.py
 - Python 3.8+
 - pip package manager
 
-### **Installation**
-```bash
-# Clone repository
-git clone https://github.com/yourusername/TASKY.git
-cd TASKY
 
-# Create virtual environment (recommended)
-python -m venv venv
-venv\Scripts\activate  # Windows
-# source venv/bin/activate  # Linux/Mac
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Run the application
-python main.py
-```
 
 ### **Project Structure**
 ```
@@ -260,10 +239,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 **Support & Community**
 
-- 📧 **Email**: [your-email@example.com]
-- 💬 **Discord**: [Join our server]
-- 🐦 **Twitter**: [@yourusername]
-- 📱 **Website**: [https://yourwebsite.com]
+- 📧 **Email**: [billymwangi200@gmail.com]
+
 
 ---
 

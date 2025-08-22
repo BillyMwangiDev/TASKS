@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Optional
 
@@ -11,7 +11,7 @@ class Task:
     description: str
     due_date: datetime
     completed: bool
-    created_at: datetime
+    created_at: Optional[datetime] = None
     time_spent: int = 0  # Time spent in minutes
     started_at: Optional[datetime] = None  # When task was started
     

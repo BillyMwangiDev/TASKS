@@ -183,6 +183,9 @@ class MainWindow(QMainWindow):
         self.refresh_button.setProperty("class", "secondary")
         self.refresh_button.setMinimumHeight(24)  # Even smaller height
         self.refresh_button.setMinimumWidth(28)  # Even smaller width - icon only
+        self.refresh_button.setToolTip("Refresh tasks (Right-click for notification options)")
+        self.refresh_button.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+        self.refresh_button.customContextMenuRequested.connect(self.show_refresh_context_menu)
         button_layout.addWidget(self.refresh_button)
         
         # Task table - cleaner design like sticky notes
@@ -334,10 +337,17 @@ class MainWindow(QMainWindow):
     def start_notification_scheduler(self):
         """Start the background notification scheduler."""
         try:
+            print("🚀 Starting notification system...")
+            
             # Connect notification manager to main window for popup positioning
             self.notification_manager.set_main_window(self)
+            print("✅ Connected notification manager to main window")
             
+            # Start the task scheduler
             self.task_scheduler.start(self.db_manager.get_due_tasks)
+            print("✅ Task scheduler started")
+            
+            # Update UI to show active status
             self.status_label.setText("🔔 Active")
             self.status_label.setStyleSheet("""
                 padding: 4px 8px; 
@@ -346,9 +356,16 @@ class MainWindow(QMainWindow):
                 color: #065f46;
                 border: 1px solid #10b981;
             """)
-            self.statusBar().showMessage("Notification system started")
+            self.statusBar().showMessage("Notification system started successfully")
+            
+            # Check scheduler status after a delay
+            QTimer.singleShot(2000, self.check_scheduler_status)
+            
         except Exception as e:
-            print(f"Failed to start notification scheduler: {e}")
+            print(f"❌ Failed to start notification scheduler: {e}")
+            import traceback
+            traceback.print_exc()
+            
             self.status_label.setText("🔔 Error")
             self.status_label.setStyleSheet("""
                 padding: 4px 8px; 
@@ -357,6 +374,66 @@ class MainWindow(QMainWindow):
                 color: #991b1b;
                 border: 1px solid #ef4444;
             """)
+            self.statusBar().showMessage(f"Notification system failed: {e}")
+    
+    def check_scheduler_status(self):
+        """Check the status of the notification scheduler."""
+        try:
+            status = self.task_scheduler.get_status()
+            print("📊 Scheduler Status:", status)
+            
+            if status["is_running"] and status["thread_alive"]:
+                print("✅ Notification system is running properly")
+                self.status_label.setText("🔔 Active")
+                self.status_label.setStyleSheet("""
+                    padding: 4px 8px; 
+                    border-radius: 4px; 
+                    background-color: #d1fae5; 
+                    color: #065f46;
+                    border: 1px solid #10b981;
+                """)
+            else:
+                print("⚠️ Notification system may not be working properly")
+                self.status_label.setText("🔔 Warning")
+                self.status_label.setStyleSheet("""
+                    padding: 4px 8px; 
+                    border-radius: 4px; 
+                    background-color: #fef3c7; 
+                    color: #92400e;
+                    border: 1px solid #fbbf24;
+                """)
+                
+                # Try to restart if not working
+                if not status["is_running"]:
+                    print("🔄 Attempting to restart notification system...")
+                    self.task_scheduler.restart(self.db_manager.get_due_tasks)
+                    
+        except Exception as e:
+            print(f"❌ Error checking scheduler status: {e}")
+    
+    def restart_notification_system(self):
+        """Manually restart the notification system."""
+        try:
+            print("🔄 Manually restarting notification system...")
+            self.task_scheduler.restart(self.db_manager.get_due_tasks)
+            
+            # Check status after restart
+            QTimer.singleShot(2000, self.check_scheduler_status)
+            
+        except Exception as e:
+            print(f"❌ Failed to restart notification system: {e}")
+    
+    def force_restart_notification_system(self):
+        """Force restart the notification system."""
+        try:
+            print("🔄 Force restarting notification system...")
+            self.task_scheduler.force_restart(self.db_manager.get_due_tasks)
+            
+            # Check status after restart
+            QTimer.singleShot(2000, self.check_scheduler_status)
+            
+        except Exception as e:
+            print(f"❌ Failed to force restart notification system: {e}")
     
     def filter_tasks(self):
         """Filter tasks based on search input."""
@@ -613,6 +690,34 @@ class MainWindow(QMainWindow):
                 border: 1px solid #3b82f6;
                 font-family: 'Segoe UI', sans-serif;
             """)
+    
+    def show_refresh_context_menu(self, position):
+        """Show context menu for refresh button with notification options."""
+        from PyQt6.QtWidgets import QMenu
+        
+        context_menu = QMenu(self)
+        
+        # Refresh tasks action
+        refresh_action = context_menu.addAction("🔄 Refresh Tasks")
+        refresh_action.triggered.connect(self.load_tasks)
+        
+        context_menu.addSeparator()
+        
+        # Notification system actions
+        restart_notif_action = context_menu.addAction("🔄 Restart Notifications")
+        restart_notif_action.triggered.connect(self.restart_notification_system)
+        
+        force_restart_action = context_menu.addAction("⚠️ Force Restart Notifications")
+        force_restart_action.triggered.connect(self.force_restart_notification_system)
+        
+        context_menu.addSeparator()
+        
+        # Status check action
+        check_status_action = context_menu.addAction("📊 Check Notification Status")
+        check_status_action.triggered.connect(self.check_scheduler_status)
+        
+        # Show the context menu
+        context_menu.exec(self.refresh_button.mapToGlobal(position))
     
     def closeEvent(self, event):
         """Handle window close event."""
