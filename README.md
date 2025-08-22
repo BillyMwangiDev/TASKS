@@ -11,7 +11,7 @@
 
 ## 🚀 **Quick Start**
 
-### **Download & Run (Recommended)**
+### **Download & Run (TASKY-Distribution/TASKY.exe)**
 1. **Download** the latest release from [Releases](https://github.com/BillyMwangiDev/TASKY/releases)
 2. **Extract** the ZIP file to any folder
 3. **Double-click** `TASKY.exe` to run
