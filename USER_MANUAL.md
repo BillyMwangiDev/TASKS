@@ -1,343 +1,332 @@
 # TASKY User Manual 📖
 
-**Complete Guide to Using TASKY - Your Personal Task Assistant**
+**Complete Guide to TASKY v2.0.0 — Your Personal Task Assistant**
 
 ---
 
-## 🚀 **Quick Start Guide**
+## 🚀 **Quick Start**
 
 ### **First Launch**
-1. **Install Dependencies**: Run `install.bat` or `install.ps1`
-2. **Launch TASKY**: Double-click `run.bat` or run `python main.py`
-3. **Add Your First Task**: Click the **➕ Add** button
-4. **Start Organizing**: Create, track, and complete tasks
+1. **Install Dependencies** (source only): `pip install -r requirements.txt`
+2. **Launch TASKY**: `python main.py` or double-click `TASKY.exe`
+3. **Add Your First Task**: Click **＋ New Task** or press `Ctrl+N`
 
 ---
 
-## 🎯 **Core Features**
+## 🖥️ **Interface Overview**
 
-### **1. Task Management**
-- **Create Tasks**: Add new tasks with title, description, and due date
-- **Edit Tasks**: Modify existing task details anytime
-- **Complete Tasks**: Mark tasks as done with one click
-- **Delete Tasks**: Remove unwanted tasks permanently
-- **Search & Filter**: Find tasks quickly with real-time search
+TASKY v2 uses a three-zone layout:
 
-### **2. Time Tracking** ⏱️
-- **Start Tracking**: Click **⏱️ Track** to begin timing a task
-- **Stop Tracking**: Click **⏹️ Stop** to end timing
-- **View Progress**: See total time spent on each task
-- **Productivity Insights**: Monitor your time management
+```
+┌─────────────────────────────────────────────────────────┐
+│  Header: logo · ＋New Task · ⏱Focus · 📊Analytics · ☀️🌙  │
+├────────────────┬────────────────────────────────────────┤
+│                │  Filter bar (All / Today / Week / …)   │
+│   Sidebar      │  ─────────────────────────────────────  │
+│  (Smart Lists  │  Task Cards                             │
+│  + Categories) │                                         │
+│                │                                         │
+├────────────────┴────────────────────────────────────────┤
+│  Stats bar: Total · Done · Pending · Overdue · Streak   │
+└─────────────────────────────────────────────────────────┘
+```
 
-### **3. Smart Notifications** 🔔
-- **Due Date Alerts**: Get notified before tasks are due
-- **Multiple Formats**: Windows toast, custom popups, and sound
-- **Background Monitoring**: Works even when TASKY is minimized
-- **Snooze Options**: Dismiss or postpone notifications
+---
 
-### **4. Theme System** 🎨
-- **Dark Mode**: Easy on the eyes for evening use
-- **Light Mode**: Dimmed for comfortable daytime use
-- **Quick Toggle**: Switch themes with **☀️🌙** button
-- **Keyboard Shortcut**: Press **Ctrl+T** to toggle
+## 🎯 **Task Management**
+
+### **Adding a Task**
+1. Click **＋ New Task** or press `Ctrl+N`
+2. Fill in the task dialog fields (see below)
+3. Click **Save**
+
+### **Task Dialog Fields**
+
+| Field | Description |
+|-------|-------------|
+| **Title** | Short task name (required) |
+| **Description** | Optional details |
+| **Due Date** | Deadline date and time |
+| **Priority** | 🔴 High / 🟡 Medium / 🔵 Low / ⚪ None |
+| **Category** | Assign to a user-defined category |
+| **Tags** | Comma-separated keywords (with autocomplete) |
+| **Estimated Time** | Expected minutes to complete |
+| **Notes** | Freeform notes section |
+| **Recurrence** | Repeat rule (see Recurring Tasks below) |
+| **Subtasks** | Add nested child tasks |
+
+### **Editing a Task**
+- Click the ✏️ icon on any task card
+
+### **Completing a Task**
+- Click the ✓ icon on the card — the card grays out and moves to completed
+
+### **Deleting a Task**
+- Click the 🗑️ icon on the card
+
+### **Duplicating a Task**
+- Click the duplicate icon on the card — creates an identical copy
+
+---
+
+## 🗂️ **Sidebar Navigation**
+
+The collapsible left sidebar provides smart views:
+
+| View | Shows |
+|------|-------|
+| 🗂 All Tasks | All tasks regardless of date |
+| 📅 Today | Tasks due today |
+| 🔜 Tomorrow | Tasks due tomorrow |
+| 📆 This Week | Tasks due within the next 7 days |
+| 🔴 Overdue | Tasks past their due date |
+| *(Category)* | Tasks belonging to that category |
+
+Click the **◀** collapse button to hide the sidebar and gain more card-list space.
+
+### **Managing Categories**
+- Click **＋ Add Category** at the bottom of the sidebar
+- Set a name, pick a color, and choose an icon (emoji)
+- Delete or edit categories via the context options next to each category name
+
+---
+
+## 🔍 **Filtering & Search**
+
+### **Filter Bar** (above the card list)
+| Button | Effect |
+|--------|--------|
+| All | Show all tasks |
+| Today | Tasks due today |
+| This Week | Tasks due this week |
+| Overdue | Past-due tasks |
+
+### **Search**
+- Press `Ctrl+F` or click the search box on the right of the filter bar
+- Searches across title, description, and tags in real time
+- Clear the box to return to the full view
+
+### **Sort**
+- Use the sort dropdown in the filter bar to order by Due Date, Priority, or Creation Date
+
+---
+
+## 🔁 **Recurring Tasks**
+
+When creating or editing a task, choose a **Recurrence** rule:
+
+| Rule | Schedule |
+|------|----------|
+| No recurrence | One-time task |
+| Every day | Daily at the same time |
+| Weekdays | Monday–Friday |
+| Weekends | Saturday–Sunday |
+| Mon / Wed / Fri | Three times a week |
+| Monthly (1st) | First day of each month |
+| Monthly (15th) | Fifteenth of each month |
+
+When you **complete** a recurring task, TASKY automatically creates the next occurrence.
+
+---
+
+## 📋 **Subtasks**
+
+- Open a task in the task dialog and use the **Subtasks** section to add child tasks
+- Subtasks appear nested under the parent card
+- Each subtask has its own title and completion state
+
+---
+
+## ⏱️ **Pomodoro Timer**
+
+Open with **⏱ Focus** in the header or `Ctrl+P`.
+
+1. **Select a task** from the dropdown to link the session
+2. Set **Work duration** (default 25 min) and **Break duration** (default 5 min)
+3. Click **▶ Start** — the circular ring counts down the remaining time
+4. When the ring completes, TASKY notifies you and starts the break countdown
+5. All completed sessions are logged and appear in Analytics
+
+### **Session Types**
+- **Work** (purple ring) — focused work interval
+- **Break** (green ring) — short rest
+
+---
+
+## 📊 **Analytics Dashboard**
+
+Open with **📊 Analytics** in the header.
+
+### **Charts**
+| Chart | Shows |
+|-------|-------|
+| Tasks Completed (7 days) | Bar chart of completions per day |
+| Focus Minutes (7 days) | Bar chart of tracked Pomodoro minutes per day |
+
+### **Insights**
+- **Most Productive Hours** — heat map of when you complete the most tasks
+- **Daily totals** — how many Pomodoro minutes you logged today
+
+---
+
+## ⚙️ **Settings**
+
+Open with `Ctrl+,` or **Tools → Settings…**.
+
+### **General Tab**
+- Minimize to tray on close (on/off)
+- Launch on Windows startup (on/off)
+- Default sort order for task list
+
+### **Notifications Tab**
+- Enable/disable Windows toast notifications
+- Enable/disable in-app popup notifications
+- Lead time — how many minutes before due date to alert
+
+### **Pomodoro Tab**
+- Default work duration (minutes)
+- Default short break duration (minutes)
+- Default long break duration (minutes)
+- Auto-start next session (on/off)
+
+### **Keyboard Tab**
+- View all keyboard shortcuts
+
+### **About Tab**
+- Version, license, and links
 
 ---
 
 ## ⌨️ **Keyboard Shortcuts**
 
-| Action | Shortcut | Description |
-|--------|----------|-------------|
-| **Add Task** | `Ctrl+N` | Create a new task |
-| **Edit Task** | `Enter` | Edit selected task |
-| **Delete Task** | `Delete` | Remove selected task |
-| **Refresh** | `F5` | Reload all tasks |
-| **Search** | `Ctrl+F` | Focus search box |
-| **Theme Toggle** | `Ctrl+T` | Switch dark/light mode |
-
----
-
-## 🖥️ **Interface Guide**
-
-### **Header Section**
-- **📋 TASKY**: App logo and title
-- **☀️🌙**: Theme toggle button
-- **🔔 Status**: Notification system indicator
-
-### **Search Bar**
-- **🔍 Search**: Type to filter tasks in real-time
-- **Smart Search**: Searches title, description, and due dates
-- **Clear Search**: Delete text to show all tasks
-
-### **Task Table**
-| Column | Description | Features |
-|--------|-------------|----------|
-| **Title** | Task name | Expandable, main identifier |
-| **Description** | Task details | Truncated preview (40 chars) |
-| **Due Date** | Deadline | MM/DD HH:MM format |
-| **Status** | Completion | ✓ Done or ⏰ Pending |
-| **Time Until Due** | Countdown | Real-time updates every 30s |
-| **Time Spent** | Tracking | Total time spent on task |
-
-### **Button Toolbar**
-- **➕ Add**: Create new task
-- **✏️ Edit**: Modify selected task
-- **✓ Done**: Mark task complete
-- **🗑️ Del**: Delete selected task
-- **⏱️ Track**: Start/stop time tracking
-- **🔄**: Refresh task list
-
-### **Statistics Bar**
-- **📊 Tasks**: Total number of tasks
-- **Completed**: Number of finished tasks
-- **Pending**: Number of active tasks
-- **Overdue**: Number of late tasks
-- **Color Coding**: Red for overdue, blue for normal
-
----
-
-## ⏱️ **Time Tracking Guide**
-
-### **Getting Started**
-1. **Select a Task**: Click on any pending task
-2. **Start Tracking**: Click **⏱️ Track** button
-3. **Work on Task**: Focus on your task
-4. **Stop Tracking**: Click **⏹️ Stop** when done
-
-### **Time Display**
-- **Format**: Hours and minutes (e.g., "2h 30m")
-- **Real-time**: Updates as you work
-- **Persistent**: Saved between sessions
-- **Completed Tasks**: Time tracking disabled
-
-### **Best Practices**
-- **Start Early**: Begin tracking when you start working
-- **Be Consistent**: Track all time spent on tasks
-- **Review Regularly**: Check your time patterns
-- **Set Goals**: Use time data to improve estimates
+| Action | Shortcut |
+|--------|----------|
+| Add Task | `Ctrl+N` |
+| Focus Search | `Ctrl+F` |
+| Pomodoro Timer | `Ctrl+P` |
+| Toggle Theme | `Ctrl+T` |
+| Open Settings | `Ctrl+,` |
+| Refresh | `F5` |
+| Quit | `Ctrl+Q` |
 
 ---
 
 ## 🔔 **Notification System**
 
-### **Types of Notifications**
-1. **Windows Toast**: Native system notifications
-2. **Custom Popup**: Prominent dialog with task details
-3. **Sound Alert**: Audio notification
-4. **Console Output**: Fallback for debugging
+### **Types**
+| Type | Description |
+|------|-------------|
+| Windows Toast | Native OS notification via `winotify` |
+| In-App Popup | Overlay dialog inside the TASKY window |
 
-### **Notification Actions**
-- **Dismiss**: Close the notification
-- **Snooze**: Remind again later
-- **Click**: Focus the TASKY window
-
-### **Settings & Behavior**
-- **Timing**: Notifications appear 15 seconds before due
-- **Frequency**: Each task notified only once
-- **Background**: Works when TASKY is minimized
-- **Sound**: Uses system notification sounds
+### **Behavior**
+- Notifications fire when a task is due (lead time configurable in Settings)
+- Each task notified only once per due event
+- Background monitoring runs even when TASKY is minimized to the system tray
 
 ---
 
-## 🎨 **Theme Customization**
+## 🖥️ **System Tray**
 
-### **Dark Mode** (Default)
-- **Outer Background**: Dark grey (#1f2937)
-- **Inner Surface**: Medium grey (#374151)
-- **Text**: Light colors for contrast
-- **Accents**: Purple (#8b5cf6) and Blue (#3b82f6)
+- Close the main window → TASKY minimizes to the system tray (if enabled in Settings)
+- **Double-click** tray icon → restore the window
+- **Right-click** tray icon → menu with: Open, Quick Add, Pomodoro, Quit
+- Tray tooltip shows live pending/overdue task counts
 
-### **Light Mode** (Dimmed)
-- **Outer Background**: Soft light grey (#e5e7eb)
-- **Inner Surface**: Gentle off-white (#f8fafc)
-- **Text**: Dark colors for readability
-- **Accents**: Same purple and blue scheme
-
-### **Switching Themes**
-- **Manual Toggle**: Click **☀️🌙** button
-- **Keyboard**: Press **Ctrl+T**
-- **Instant**: Changes apply immediately
-- **Persistent**: Theme choice remembered
+### **Quick Add**
+Right-click the tray icon → **Quick Add Task** to create a task without opening the full window.
 
 ---
 
-## 📱 **Window Management**
+## 🎨 **Theme System**
 
-### **Resizing**
-- **Default Size**: 420x400 pixels
-- **Minimum Size**: 380x350 pixels
-- **Maximum Size**: 800x700 pixels
-- **Flexible**: Resize to fit your screen
+| Theme | Description |
+|-------|-------------|
+| Dark (default) | Deep navy/slate backgrounds, purple accents |
+| Light | Soft grey surfaces, same purple/blue accent palette |
 
-### **Layout Options**
-- **Compact Mode**: Use smaller window for productivity
-- **Expanded View**: Larger window for detailed work
-- **Column Adjustments**: Resize table columns as needed
-- **Responsive Design**: Adapts to different screen sizes
+- Toggle with `Ctrl+T` or the ☀️🌙 button — takes effect instantly
+- Preference is saved and restored on next launch
 
 ---
 
 ## 💾 **Data Management**
 
 ### **Storage**
-- **Database**: SQLite file (`tasks.db`)
-- **Location**: Same folder as TASKY
-- **Automatic**: Saves changes immediately
-- **Reliable**: No data loss on crashes
+- **Database**: SQLite file `tasks.db` in the same folder as TASKY
+- **Auto-save**: Every change is committed immediately
+- **Migration**: Opening v2 with a v1 database automatically adds new columns
 
-### **Backup & Safety**
-- **Manual Backup**: Copy `tasks.db` file
-- **Version Control**: Track changes over time
-- **Export**: Save tasks to external formats (coming soon)
-- **Reset**: Delete database to start fresh
+### **Backup**
+- Copy `tasks.db` to another location for a manual backup
 
-### **Performance**
-- **Fast Loading**: Optimized database queries
-- **Memory Efficient**: Scales with task count
-- **Background Processing**: Non-blocking operations
-- **Regular Updates**: Statistics refresh automatically
+### **Export**
+- **File → Export to CSV…** — comma-separated spreadsheet
+- **File → Export to JSON…** — structured JSON array
+
+### **Reset**
+- Delete `tasks.db` to wipe all tasks and start fresh (irreversible)
+
+---
+
+## 📊 **Stats Bar**
+
+The bottom bar always shows live totals:
+
+| Label | Meaning |
+|-------|---------|
+| Total | All tasks in the current view |
+| Done | Completed tasks |
+| Pending | Incomplete tasks |
+| Overdue | Tasks past their due date |
+| Streak | Consecutive days with at least one completed task |
 
 ---
 
 ## 🔧 **Troubleshooting**
 
-### **Common Issues**
+### **Notifications Not Working**
+- Check **Settings → Notifications** to confirm they are enabled
+- Ensure Windows Focus Assist is not blocking notifications
+- Verify Windows 10/11 notification permissions for TASKY
 
-#### **Notifications Not Working**
-- **Check Windows Settings**: Ensure notifications are enabled
-- **Verify Permissions**: Allow TASKY to show notifications
-- **Update Windows**: Ensure Windows 10/11 is current
-- **Sound Settings**: Check system notification sounds
+### **Database Errors**
+- Ensure the folder containing `tasks.db` is writable
+- Close any other running TASKY instance
+- If the database is corrupted, delete `tasks.db` to reset
 
-#### **Database Errors**
-- **File Permissions**: Ensure write access to folder
-- **File Locked**: Close other instances of TASKY
-- **Corrupted Data**: Delete `tasks.db` to reset
-- **Disk Space**: Ensure sufficient storage
+### **UI Display Issues**
+- Try toggling the theme (`Ctrl+T`)
+- Check Windows DPI / scaling settings
+- Restart TASKY
 
-#### **UI Display Issues**
-- **Graphics Drivers**: Update display drivers
-- **DPI Settings**: Check Windows scaling
-- **Theme Issues**: Try switching themes
-- **Restart App**: Close and reopen TASKY
-
-### **Performance Tips**
-- **Large Task Lists**: Use search to filter tasks
-- **Memory Usage**: Close unused applications
-- **Regular Maintenance**: Restart app periodically
-- **Database Size**: Monitor `tasks.db` file size
+### **Performance**
+- Use the filter bar to reduce the number of visible cards on very large task lists
+- Keep TASKY updated for the latest performance improvements
 
 ---
 
-## 📊 **Productivity Tips**
+## 🚀 **Advanced Tips**
 
-### **Task Organization**
-- **Clear Titles**: Use descriptive, specific names
-- **Realistic Deadlines**: Set achievable due dates
-- **Priority Order**: Focus on most important tasks first
-- **Regular Review**: Check and update task status
-
-### **Time Management**
-- **Track Everything**: Monitor time on all tasks
-- **Set Time Goals**: Estimate and track actual time
-- **Break Down Tasks**: Split large tasks into smaller ones
-- **Review Patterns**: Analyze your time usage
-
-### **Workflow Optimization**
-- **Use Shortcuts**: Learn keyboard shortcuts for speed
-- **Batch Operations**: Group similar tasks together
-- **Regular Updates**: Keep task information current
-- **Progress Tracking**: Monitor completion rates
+1. **Priority + filter**: Set all today's tasks to High and filter by Today for a focused view
+2. **Pomodoro + analytics**: After a week of using the timer, check Analytics to find your peak hours
+3. **Tags for context**: Tag tasks with `@work`, `@home`, or project names, then search by tag
+4. **Recurring + categories**: Put daily stand-ups in a "Work" category with a daily recurrence
+5. **Export for reporting**: Export to CSV weekly and open in a spreadsheet for custom analysis
 
 ---
 
-## 🚀 **Advanced Features**
+## 📝 **Version History**
 
-### **Search & Filter**
-- **Real-time Search**: Type to filter instantly
-- **Multi-field Search**: Searches title, description, dates
-- **Smart Matching**: Finds partial text matches
-- **Clear Results**: Easy to return to full view
+| Version | Date | Summary |
+|---------|------|---------|
+| 2.0.0 | 2026-04-19 | Sidebar, cards, Pomodoro, analytics, categories, priorities, tags, recurrence, tray |
+| 1.0.0 | 2024-08-22 | Initial release — table UI, time tracking, notifications, themes |
 
-### **Statistics & Insights**
-- **Task Counts**: Total, completed, pending, overdue
-- **Visual Indicators**: Color-coded status information
-- **Real-time Updates**: Statistics refresh automatically
-- **Productivity Metrics**: Track your progress
-
-### **Customization**
-- **Theme Switching**: Dark and light modes
-- **Window Sizing**: Flexible window dimensions
-- **Column Layout**: Adjustable table columns
-- **Button States**: Dynamic button availability
-
----
-
-## 🔮 **Future Features**
-
-### **Planned Enhancements**
-- **Task Categories**: Organize by project or type
-- **Priority Levels**: High, medium, low priority
-- **Recurring Tasks**: Daily, weekly, monthly tasks
-- **Calendar View**: Monthly and weekly calendar
-- **Export Options**: CSV, JSON, calendar formats
-- **Cloud Sync**: Backup and synchronization
-- **Mobile App**: iOS and Android companion
-
-### **User Requests**
-- **Custom Notifications**: Personalized alert times
-- **Task Templates**: Save common task patterns
-- **Time Reports**: Detailed time analysis
-- **Integration**: Connect with other productivity tools
-
----
-
-## 📞 **Support & Help**
-
-### **Getting Help**
-- **Documentation**: Check this manual first
-- **GitHub Issues**: Report bugs and request features
-- **Community**: Join discussions and share tips
-- **Contact**: Reach out for direct support
-
-### **Resources**
-- **PyQt6 Documentation**: GUI framework details
-- **SQLite Guide**: Database information
-- **Windows Notifications**: System integration details
-- **Python Resources**: Programming language help
-
----
-
-## 📝 **Changelog**
-
-### **Version 1.0.0** (Current)
-- ✨ **Core Task Management**: Create, edit, delete, complete tasks
-- 🎨 **Dual Theme System**: Dark and dimmed light modes
-- 🔔 **Smart Notifications**: Windows toast with sound alerts
-- ⏱️ **Time Tracking**: Monitor time spent on tasks
-- 🔍 **Real-time Search**: Find tasks quickly
-- 📊 **Live Statistics**: Task counts and productivity metrics
-- ⌨️ **Keyboard Shortcuts**: Fast keyboard navigation
-- 📱 **Responsive Design**: Compact, resizable interface
-
----
-
-## 🤝 **Contributing**
-
-### **How to Help**
-- **Report Bugs**: Find and report issues
-- **Suggest Features**: Share your ideas
-- **Improve Code**: Submit code improvements
-- **Update Documentation**: Help keep docs current
-- **Test Features**: Try new functionality
-
-### **Development**
-- **Python 3.8+**: Modern Python features
-- **PyQt6**: Cross-platform GUI framework
-- **SQLite**: Lightweight database
-- **Open Source**: MIT license for freedom
+See [CHANGELOG.md](CHANGELOG.md) for full details.
 
 ---
 
 **Made with ❤️ by the TASKY Team**
 
-*TASKY - Your Personal Task Assistant*
+*TASKY v2.0.0 — Your Personal Task Assistant*

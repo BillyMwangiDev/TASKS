@@ -1,232 +1,232 @@
 from PyQt6.QtWidgets import (
-    QDialog, QVBoxLayout, QHBoxLayout, QLabel, 
-    QPushButton, QFrame, QApplication
+    QDialog, QVBoxLayout, QHBoxLayout, QLabel,
+    QPushButton, QFrame, QApplication, QProgressBar
 )
-from PyQt6.QtCore import Qt, QTimer, pyqtSignal
-from PyQt6.QtGui import QFont, QPixmap, QIcon
-from datetime import datetime
+from PyQt6.QtCore import Qt, QTimer, QPoint, QPropertyAnimation, QEasingCurve
+from PyQt6.QtGui import (
+    QFont, QPainter, QColor, QPen, QBrush, QPainterPath
+)
+from datetime import datetime, timedelta
+
+_AUTO_CLOSE_MS = 25_000
+_SNOOZE_MINUTES = 10
+_PROGRESS_INTERVAL_MS = 100
 
 
 class NotificationPopup(QDialog):
-    """Custom notification popup for task due alerts."""
-    
-    def __init__(self, task_title: str, task_description: str, due_date: datetime, parent=None):
-        """Initialize the notification popup."""
+    """Polished floating notification — translucent bg, slide-in, countdown bar."""
+
+    def __init__(self, task_id: int, task_title: str, task_description: str,
+                 due_date: datetime, theme_manager, snooze_callback=None, parent=None):
         super().__init__(parent)
+        self.task_id = task_id
         self.task_title = task_title
         self.task_description = task_description
         self.due_date = due_date
-        
-        self.setup_ui()
-        self.setup_timer()
-        
-        # Make the popup appear on top of all windows
+        self.theme_manager = theme_manager
+        self._snooze_callback = snooze_callback
+
         self.setWindowFlags(
-            Qt.WindowType.WindowStaysOnTopHint | 
+            Qt.WindowType.WindowStaysOnTopHint |
             Qt.WindowType.FramelessWindowHint |
             Qt.WindowType.Tool
         )
+        self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
+        self.setFixedWidth(360)
+        self.setMinimumHeight(160 + (50 if task_description else 0))
+
+        self._setup_ui()
+        self._setup_timers()
+        self._position()
+
+    # ── Custom paint — rounded card + glow border ─────────────────────────────
+
+    def paintEvent(self, _event):
+        p = QPainter(self)
+        p.setRenderHint(QPainter.RenderHint.Antialiasing)
+        w, h = self.width(), self.height()
+        r = 14
         
-        # Position the popup in the top-right corner
-        self.position_popup()
-    
-    def setup_ui(self):
-        """Set up the user interface."""
-        self.setFixedSize(360, 180)  # Smaller size for better compactness
+        c = self.theme_manager.get_theme_colors()
+
+        # Outer glow
+        glow_color = c.get('border_glow', 'rgba(156,163,175,0.35)')
+        glow = QColor(glow_color)
+        glow_pen = QPen(glow, 8)
+        p.setPen(glow_pen)
+        p.setBrush(Qt.BrushStyle.NoBrush)
+        glow_path = QPainterPath()
+        glow_path.addRoundedRect(4, 4, w - 8, h - 8, r, r)
+        p.drawPath(glow_path)
+
+        # Card background
+        card_bg = QColor(c.get('card_bg', c['surface_1']))
+        p.setBrush(QBrush(card_bg))
+        card_path = QPainterPath()
+        card_path.addRoundedRect(6, 6, w - 12, h - 12, r, r)
         
-        # Modern, cohesive styling
-        self.setStyleSheet("""
-            QDialog {
-                background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                    stop:0 #1e293b, stop:1 #0f172a);
-                border: 2px solid #6366f1;
-                border-radius: 12px;
-                font-family: 'Segoe UI', sans-serif;
-            }
-            QLabel {
-                color: white;
-                background-color: transparent;
-            }
-            QPushButton {
-                background-color: #6366f1;
-                color: white;
-                border: none;
-                border-radius: 6px;
-                padding: 6px 12px;
-                font-weight: 600;
-                font-size: 12px;
-                min-height: 32px;
-                font-family: 'Segoe UI', sans-serif;
-            }
-            QPushButton:hover {
-                background-color: #4f46e5;
-            }
-            QPushButton[class="secondary"] {
-                background-color: #8b5cf6;
-            }
-            QPushButton[class="secondary"]:hover {
-                background-color: #7c3aed;
-            }
-        """)
-        
-        # Main layout
-        main_layout = QVBoxLayout()
-        self.setLayout(main_layout)
-        main_layout.setSpacing(14)  # Reduced spacing
-        main_layout.setContentsMargins(18, 18, 18, 18)  # Reduced margins
-        
-        # Header with icon and title
-        header_layout = QHBoxLayout()
-        
-        # Bell icon (using emoji as text)
-        icon_label = QLabel("🔔")
-        icon_label.setFont(QFont("Segoe UI", 16))  # Smaller icon
-        icon_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        header_layout.addWidget(icon_label)
-        
-        # Title section
-        title_layout = QVBoxLayout()
-        
-        # Main title
-        title_label = QLabel("TASKY ALERT!")
-        title_label.setFont(QFont("Segoe UI", 14, QFont.Weight.Bold))  # Smaller font
-        title_label.setStyleSheet("color: #fbbf24; font-weight: bold; font-family: 'Segoe UI', sans-serif;")  # Warning color
-        title_layout.addWidget(title_label)
-        
-        # Task title
-        task_title_label = QLabel(f"'{self.task_title}'")
-        task_title_label.setFont(QFont("Segoe UI", 12, QFont.Weight.Bold))  # Smaller font
-        task_title_label.setStyleSheet("color: #ecf0f1; font-family: 'Segoe UI', sans-serif;")
-        title_layout.addWidget(task_title_label)
-        
-        header_layout.addLayout(title_layout)
-        header_layout.addStretch()
-        
-        main_layout.addLayout(header_layout)
-        
-        # Separator
-        separator = QFrame()
-        separator.setFrameShape(QFrame.Shape.HLine)
-        separator.setStyleSheet("background-color: #475569;")
-        separator.setFixedHeight(1)
-        main_layout.addWidget(separator)
-        
-        # Task details
+        # Solid fill instead of gradient to match premium cards
+        p.fillPath(card_path, QBrush(card_bg))
+
+        # Accent border
+        p.setPen(QPen(QColor(c['primary']), 1.5))
+        p.setBrush(Qt.BrushStyle.NoBrush)
+        p.drawPath(card_path)
+
+        p.end()
+
+    # ── UI ────────────────────────────────────────────────────────────────────
+
+    def _setup_ui(self):
+        c = self.theme_manager.get_theme_colors()
+
+        root = QVBoxLayout(self)
+        root.setContentsMargins(20, 18, 20, 12)
+        root.setSpacing(10)
+
+        # ── Header row ────────────────────────────────────────────────────────
+        header_row = QHBoxLayout()
+        header_row.setSpacing(10)
+
+
+
+        title_col = QVBoxLayout()
+        title_col.setSpacing(2)
+
+        alert_lbl = QLabel("Task Due")
+        alert_lbl.setFont(QFont("Segoe UI", 11, QFont.Weight.Bold))
+        alert_lbl.setStyleSheet(f"color: {c['warning']}; background: transparent;")
+        title_col.addWidget(alert_lbl)
+
+        task_lbl = QLabel(self.task_title)
+        task_lbl.setFont(QFont("Segoe UI", 13, QFont.Weight.Bold))
+        task_lbl.setStyleSheet(f"color: {c['text_primary']}; background: transparent;")
+        task_lbl.setWordWrap(True)
+        title_col.addWidget(task_lbl)
+
+        header_row.addLayout(title_col, 1)
+
+
+
+        root.addLayout(header_row)
+
+        # ── Separator ─────────────────────────────────────────────────────────
+        sep = QFrame()
+        sep.setFrameShape(QFrame.Shape.HLine)
+        sep.setStyleSheet(f"background: {c['border']}; border: none;")
+        sep.setFixedHeight(1)
+        root.addWidget(sep)
+
+        # ── Description + due ─────────────────────────────────────────────────
         if self.task_description:
-            desc_label = QLabel(f"Description: {self.task_description}")
-            desc_label.setFont(QFont("Segoe UI", 10))  # Smaller font
-            desc_label.setWordWrap(True)
-            desc_label.setStyleSheet("color: #cbd5e1; font-family: 'Segoe UI', sans-serif;")
-            main_layout.addWidget(desc_label)
-        
-        # Due date
-        due_label = QLabel(f"Due: {self.due_date.strftime('%m/%d %H:%M')}")
-        due_label.setFont(QFont("Segoe UI", 11, QFont.Weight.Bold))  # Smaller font
-        due_label.setStyleSheet("color: #fbbf24; font-family: 'Segoe UI', sans-serif;")
-        main_layout.addWidget(due_label)
-        
-        main_layout.addStretch()
-        
-        # Buttons
-        button_layout = QHBoxLayout()
-        button_layout.setSpacing(8)  # Reduced spacing
-        
-        # Dismiss button
-        dismiss_button = QPushButton("✕ Dismiss")
-        dismiss_button.setProperty("class", "small")
-        dismiss_button.clicked.connect(self.close)
-        dismiss_button.setFixedHeight(32)  # Smaller height
-        button_layout.addWidget(dismiss_button)
-        
-        # Snooze button
-        snooze_button = QPushButton("⏰ Snooze")
-        snooze_button.setProperty("class", "small secondary")
-        snooze_button.clicked.connect(self.snooze_notification)
-        snooze_button.setFixedHeight(32)  # Smaller height
-        button_layout.addWidget(snooze_button)
-        
-        main_layout.addLayout(button_layout)
-    
-    def setup_timer(self):
-        """Set up auto-close timer."""
-        # Auto-close after 25 seconds
-        self.auto_close_timer = QTimer()
-        self.auto_close_timer.timeout.connect(self.close)
-        self.auto_close_timer.start(25000)  # 25 seconds
-    
-    def position_popup(self):
-        """Position the popup in the top-right corner of the screen."""
-        try:
-            # Get the primary screen
-            screen = QApplication.primaryScreen()
-            if screen:
-                screen_geometry = screen.geometry()
-                
-                # Calculate position (top-right corner with some margin)
-                x = screen_geometry.width() - self.width() - 20
-                y = 20
-                
-                self.move(x, y)
-            else:
-                # Fallback positioning
-                self.move(100, 100)
-        except Exception as e:
-            print(f"Warning: Could not position popup properly: {e}")
-            # Fallback positioning
-            self.move(100, 100)
-    
-    def snooze_notification(self):
-        """Snooze the notification for 5 minutes."""
-        # This could be implemented to re-trigger the notification later
-        print(f"Notification snoozed for task: {self.task_title}")
-        self.close()
-    
+            desc_lbl = QLabel(self.task_description)
+            desc_lbl.setFont(QFont("Segoe UI", 11))
+            desc_lbl.setStyleSheet(f"color: {c['text_secondary']}; background: transparent;")
+            desc_lbl.setWordWrap(True)
+            root.addWidget(desc_lbl)
+
+        due_lbl = QLabel(f"Due: {self.due_date.strftime('%b %d · %H:%M')}")
+        due_lbl.setFont(QFont("Segoe UI", 11))
+        due_lbl.setStyleSheet(f"color: {c['text_muted']}; background: transparent;")
+        root.addWidget(due_lbl)
+
+        # ── Buttons ───────────────────────────────────────────────────────────
+        btn_row = QHBoxLayout()
+        btn_row.setSpacing(8)
+        btn_row.addStretch()
+
+        snooze_btn = QPushButton("Snooze 10m")
+        snooze_btn.setFixedHeight(30)
+        snooze_btn.setProperty("class", "secondary")
+        snooze_btn.clicked.connect(self._snooze)
+        btn_row.addWidget(snooze_btn)
+
+        dismiss_btn = QPushButton("Dismiss")
+        dismiss_btn.setFixedHeight(30)
+        dismiss_btn.clicked.connect(self.close)
+        btn_row.addWidget(dismiss_btn)
+
+        root.addLayout(btn_row)
+
+        # ── Countdown progress bar ────────────────────────────────────────────
+        self._progress = QProgressBar()
+        self._progress.setFixedHeight(3)
+        self._progress.setRange(0, _AUTO_CLOSE_MS)
+        self._progress.setValue(_AUTO_CLOSE_MS)
+        self._progress.setTextVisible(False)
+        self._progress.setStyleSheet(
+            f"QProgressBar {{ background: transparent; border: none; border-radius: 1px; }}"
+            f"QProgressBar::chunk {{ background: {c['primary']}; border-radius: 1px; }}"
+        )
+        root.addWidget(self._progress)
+
+    # ── Timers ────────────────────────────────────────────────────────────────
+
+    def _setup_timers(self):
+        self._elapsed = 0
+
+        self._close_timer = QTimer(self)
+        self._close_timer.setSingleShot(True)
+        self._close_timer.timeout.connect(self.close)
+        self._close_timer.start(_AUTO_CLOSE_MS)
+
+        self._tick_timer = QTimer(self)
+        self._tick_timer.timeout.connect(self._tick)
+        self._tick_timer.start(_PROGRESS_INTERVAL_MS)
+
+    def _tick(self):
+        self._elapsed += _PROGRESS_INTERVAL_MS
+        self._progress.setValue(max(0, _AUTO_CLOSE_MS - self._elapsed))
+
+    # ── Position + slide-in ───────────────────────────────────────────────────
+
+    def _position(self):
+        screen = QApplication.primaryScreen()
+        if screen:
+            sg = screen.availableGeometry()
+            target_x = sg.right() - self.width() - 16
+            target_y = sg.bottom() - self.height() - 16
+        else:
+            target_x, target_y = 100, 100
+
+        # Start off-screen to the right
+        self.move(target_x + self.width() + 40, target_y)
+        self._slide_anim = QPropertyAnimation(self, b"pos", self)
+        self._slide_anim.setDuration(320)
+        self._slide_anim.setStartValue(QPoint(target_x + self.width() + 40, target_y))
+        self._slide_anim.setEndValue(QPoint(target_x, target_y))
+        self._slide_anim.setEasingCurve(QEasingCurve.Type.OutCubic)
+
+    # ── Public API ────────────────────────────────────────────────────────────
+
     def show_popup(self):
-        """Show the popup with animation."""
-        try:
-            # Fade in effect
-            self.setWindowOpacity(0.0)
-            self.show()
-            
-            # Animate opacity
-            self.fade_timer = QTimer()
-            self.fade_timer.timeout.connect(self.fade_in)
-            self.fade_timer.start(50)  # Update every 50ms
-            
-            # Ensure the popup is visible and focused
-            self.raise_()
-            self.activateWindow()
-            
-        except Exception as e:
-            print(f"Error showing popup: {e}")
-            # Fallback: show without animation
-            self.show()
-            self.raise_()
-            self.activateWindow()
-    
-    def fade_in(self):
-        """Fade in animation."""
-        try:
-            current_opacity = self.windowOpacity()
-            if current_opacity < 1.0:
-                self.setWindowOpacity(current_opacity + 0.1)
-            else:
-                if hasattr(self, 'fade_timer'):
-                    self.fade_timer.stop()
-        except Exception as e:
-            print(f"Error in fade animation: {e}")
-            # Stop animation on error
-            if hasattr(self, 'fade_timer'):
-                self.fade_timer.stop()
-    
+        self.setWindowOpacity(0.0)
+        self.show()
+        self._slide_anim.start()
+
+        # Fade in alongside slide
+        self._fade_timer = QTimer(self)
+        self._fade_timer.timeout.connect(self._fade_step)
+        self._fade_timer.start(20)
+
+        self.raise_()
+        self.activateWindow()
+
+    def _fade_step(self):
+        op = self.windowOpacity()
+        if op < 1.0:
+            self.setWindowOpacity(min(1.0, op + 0.08))
+        else:
+            self._fade_timer.stop()
+
+    def _snooze(self):
+        if self._snooze_callback and self.task_id > 0:
+            self._snooze_callback(self.task_id, datetime.now() + timedelta(minutes=_SNOOZE_MINUTES))
+        self.close()
+
     def closeEvent(self, event):
-        """Handle close event."""
-        try:
-            if hasattr(self, 'auto_close_timer'):
-                self.auto_close_timer.stop()
-            if hasattr(self, 'fade_timer'):
-                self.fade_timer.stop()
-        except Exception as e:
-            print(f"Error in close event: {e}")
-        
+        for attr in ("_close_timer", "_tick_timer", "_fade_timer"):
+            t = getattr(self, attr, None)
+            if t:
+                t.stop()
         event.accept()

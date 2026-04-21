@@ -7,59 +7,111 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  # ── Windows — produces TASKY-Setup-v*.exe + TASKY-v*-Windows.zip ──────────
+  build-windows:
     runs-on: windows-latest
-    
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
-        
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        
-    - name: Build executable
-      run: python build.py
-      
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: TASKY-Windows
-        path: |
-          TASKY-Distribution/
-          TASKY-v1.0.0-Windows.zip
-        retention-days: 30
-        
-    - name: Create Release
-      if: startsWith(github.ref, 'refs/tags/')
-      uses: softprops/action-gh-release@v1
-      with:
-        files: |
-          TASKY-v1.0.0-Windows.zip
-        body: |
-          ## 🎉 TASKY v${{ github.ref_name }} Released!
-          
-          ### What's New:
-          - Standalone Windows executable
-          - No Python installation required
-          - Complete task management solution
-          
-          ### Installation:
-          1. Download and extract the ZIP file
-          2. Double-click TASKY.exe to run
-          3. Enjoy! 🚀
-          
-          ### Features:
-          - Task Management (Create, Edit, Delete, Complete)
-          - Time Tracking
-          - Smart Notifications
-          - Dark/Light Themes
-          - Real-time Search
-          - Live Statistics
-          - Keyboard Shortcuts
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Build
+        run: python build.py
+
+      - name: Upload Windows artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: TASKY-Windows
+          path: |
+            TASKY-Setup-v*.exe
+            TASKY-v*-Windows.zip
+          retention-days: 30
+
+  # ── macOS — produces TASKY-v*.dmg ─────────────────────────────────────────
+  build-mac:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Build
+        run: python build.py
+
+      - name: Upload macOS artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: TASKY-Mac
+          path: |
+            TASKY-v*.dmg
+            TASKY-v*-Mac.zip
+          retention-days: 30
+
+  # ── Release — attaches both platform artifacts to the GitHub release ───────
+  release:
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: [build-windows, build-mac]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: TASKY-Windows
+          path: artifacts/
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: TASKY-Mac
+          path: artifacts/
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: artifacts/*
+          body: |
+            ## TASKY ${{ github.ref_name }}
+
+            ### Download
+            | Platform | Installer |
+            |----------|-----------|
+            | Windows  | `TASKY-Setup-v*.exe` (recommended) or `TASKY-v*-Windows.zip` |
+            | macOS    | `TASKY-v*.dmg` |
+
+            ### Windows installation
+            1. Download and run `TASKY-Setup-v*.exe`
+            2. Follow the installer — TASKY is added to Start Menu and Desktop
+
+            ### macOS installation
+            1. Download `TASKY-v*.dmg`
+            2. Open it and drag **TASKY** into **Applications**
+            3. Launch from Launchpad or Applications
+
+            ### Features
+            - Task management with due dates & recurrence
+            - Pomodoro timer
+            - AI assistant (requires Anthropic API key)
+            - System tray integration
+            - Dark / Light themes

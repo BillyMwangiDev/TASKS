@@ -1,3 +1,19 @@
+# Core
 PyQt6==6.9.1
-win10toast==0.9
-pyinstaller>=5.0.0
+PyQt6-WebEngine==6.6.0
+pyinstaller>=6.0.0
+
+# Windows specific
+winotify>=1.1.0; sys_platform == 'win32'
+
+# Claude AI integration
+anthropic>=0.40.0
+
+# Secure OS keychain storage
+keyring>=24.0.0
+
+# MCP server
+mcp>=1.0.0
+
+# Image processing (for icons)
+pillow>=10.0.0

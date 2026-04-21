@@ -30,7 +30,7 @@ MANIFEST
 #  Usually these files are written by a python script from a template
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.
 *.manifest
-*.spec
+# *.spec  # Keep TASKY.spec in version control (PyInstaller build config)
 
 # Installer logs
 pip-log.txt
@@ -239,8 +239,31 @@ $RECYCLE.BIN/
 
 # Build artifacts
 TASKY-Distribution/
+tmp_dmg/
+build/
+dist/
+
+# Distribution binaries (too large for git)
 TASKY-*.zip
-TASKY.spec
+TASKY-*.dmg
+*.dmg
+
+# PyInstaller spec — keep in version control
+# TASKY.spec
+
+# Node.js / Frontend
+node_modules/
+web/node_modules/
+web/.next/
+web/dist/
+web/out/
+web/.turbo/
+web/.cache/
+.npm/
+.yarn/
+yarn-error.log
+npm-debug.log*
+pnpm-debug.log*
 
 # Log files
 *.log

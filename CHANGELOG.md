@@ -7,60 +7,72 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Planned
+- Cloud synchronization
+- Mobile companion app
+- Team collaboration features
+- Plugin system
+
+---
+
+## [2.0.0] - 2026-04-19
+
 ### Added
-- GitHub Actions workflow for automatic builds
-- Comprehensive documentation and user manual
-- Issue and pull request templates
-- Security policy and code of conduct
-- Contributing guidelines
+- 🗂️ **Sidebar navigation** — collapsible left panel with smart lists: All Tasks, Today, Tomorrow, This Week, Overdue, plus per-category views
+- 🃏 **Card-based task list** — replaced table with rich task cards showing priority badge, tags, category, time estimate, and subtask count
+- 🔍 **Filter bar** — quick-filter buttons (All / Today / This Week / Overdue) combined with inline search and sort
+- 🏷️ **Priority system** — High 🔴 / Medium 🟡 / Low 🔵 / None ⚪ with color-coded badges
+- 📁 **Categories** — user-defined project categories with custom color and icon; sidebar shows per-category task counts
+- 🏷️ **Tags** — free-form tag field with autocomplete from existing tags
+- 🔁 **Recurring tasks** — recurrence rules: daily, weekdays, weekends, Mon/Wed/Fri, monthly (1st or 15th); completing a recurring task spawns the next occurrence
+- 📋 **Subtasks** — nest child tasks under any parent task
+- ⏱️ **Pomodoro timer** — dedicated panel with circular SVG-style progress ring, configurable work/break durations, and session logging (`Ctrl+P`)
+- 📊 **Analytics dashboard** — 7-day bar charts for task completions and focused minutes, most-productive-hours breakdown
+- ⚙️ **Settings dialog** — tabbed panel: General, Notifications, Pomodoro, Keyboard, About (`Ctrl+,`)
+- 🖥️ **System tray** — minimize-to-tray support; right-click tray menu; quick-add dialog from tray icon; tooltip shows pending/overdue counts
+- 💾 **Export** — File → Export to CSV… / Export to JSON…
+- 🔔 **In-app notification popup** — overlay popup inside the window alongside native Windows toast
+- 📊 **Streak counter** — consecutive-day completion streak shown in stats bar
+- 🔢 **Estimated time** — optional minutes estimate per task, shown on the card
+- 📝 **Notes field** — freeform notes section in the task dialog
+- 🗃️ **Task duplication** — duplicate any task with one click
+- 📋 **Menu bar** — File, View, Tools, and Help menus with full keyboard shortcut coverage
+- 🔑 **New shortcuts** — `Ctrl+P` (Pomodoro), `Ctrl+,` (Settings), `Ctrl+Q` (Quit)
+- 🗄️ **Database migrations** — automatic schema upgrade from v1 databases (no data loss)
 
 ### Changed
-- Improved build script with better error handling
-- Enhanced README with GitHub badges and structure
-- Cleaned up code comments for public release
+- App version bumped to **2.0.0** (`app.setApplicationVersion("2.0.0")`)
+- Minimum window size increased to **800×560** (default 1100×700) for the new layout
+- Notification backend switched from `win10toast` to **`winotify`** for better PyInstaller compatibility
+- Task dialog redesigned with scrollable body, priority/category/tags/recurrence/subtask fields
+- Stats bar now shows Total / Done / Pending / Overdue / Streak
+- PyQt6 updated to **6.9.1**
+
+### Removed
+- Plain table-based task list (replaced by card list)
+
+---
 
 ## [1.0.0] - 2024-08-22
 
 ### Added
 - ✨ **Core Task Management**: Create, edit, delete, and complete tasks
-- 🎨 **Dual Theme System**: Dark and dimmed light modes with cohesive design
+- 🎨 **Dual Theme System**: Dark and dimmed light modes
 - 🔔 **Smart Notifications**: Windows toast notifications with sound alerts
 - ⏱️ **Time Tracking**: Monitor time spent on tasks with start/stop functionality
 - 🔍 **Real-time Search**: Find tasks quickly with instant filtering
 - 📊 **Live Statistics**: Task counts and productivity metrics
-- ⌨️ **Keyboard Shortcuts**: Fast navigation and actions
-- 📱 **Responsive Design**: Compact, resizable interface
+- ⌨️ **Keyboard Shortcuts**: `Ctrl+N`, `Ctrl+F`, `Ctrl+T`, `F5`, `Delete`, `Enter`
 - 💾 **SQLite Database**: Reliable data persistence
-- 🖥️ **Modern UI**: Clean, sticky-note inspired interface
-
-### Features
-- **Task Operations**: Full CRUD operations for tasks
-- **Due Date Management**: Real-time countdown to deadlines
-- **Theme Switching**: Toggle between dark and light modes
-- **Search & Filter**: Multi-field search across task data
-- **Time Management**: Track time spent on individual tasks
-- **Statistics Dashboard**: Visual task progress indicators
-- **Background Monitoring**: Continuous task deadline checking
-- **Notification System**: Multi-format alerts with snooze options
-- **Window Management**: Flexible, resizable interface
-- **Data Persistence**: Automatic saving and recovery
+- 🖥️ **Modern UI**: Compact table-based task list
 
 ### Technical
-- **PyQt6 Framework**: Modern Python GUI development
-- **SQLite Database**: Lightweight, reliable data storage
-- **Asynchronous Processing**: Background task scheduling
-- **Windows Integration**: Native notification system
-- **Cross-Platform Ready**: Designed for future expansion
-- **Modular Architecture**: Clean, maintainable code structure
-- **Error Handling**: Robust error handling and recovery
-- **Performance Optimized**: Efficient database queries and UI updates
+- PyQt6 GUI framework
+- SQLite database with single `tasks` table
+- Background task scheduler for due-date notifications
+- Windows toast via `win10toast`
 
-### Documentation
-- **User Manual**: Comprehensive feature guide
-- **Installation Scripts**: Automated dependency installation
-- **Build System**: Executable creation and distribution
-- **Distribution Guide**: Sharing and deployment instructions
-- **Troubleshooting**: Common issues and solutions
+---
 
 ## [0.9.0] - 2024-08-21
 
@@ -70,11 +82,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Simple notification system
 - Basic UI framework
 
-### Changed
-- Multiple UI redesigns and improvements
-- Theme system development
-- Notification enhancement
-- Performance optimizations
+---
 
 ## [0.8.0] - 2024-08-20
 
@@ -87,8 +95,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Improved button aesthetics
 - Compact header design
-- Enhanced theme toggle
 - Window sizing optimizations
+
+---
 
 ## [0.7.0] - 2024-08-19
 
@@ -96,13 +105,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Dark/light theme system
 - Notification sound support
 - Task completion tracking
-- Real-time updates
+- Real-time UI updates
 
-### Changed
-- UI redesign for sticky notes style
-- Color scheme improvements
-- Button and icon refinements
-- Layout optimizations
+---
 
 ## [0.6.0] - 2024-08-18
 
@@ -110,13 +115,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Windows toast notifications
 - Background task monitoring
 - Due date alerts
-- Basic task management
 
-### Changed
-- Improved application naming
-- Enhanced user interface
-- Better error handling
-- Performance improvements
+---
 
 ## [0.5.0] - 2024-08-17
 
@@ -126,69 +126,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Task data model
 - Simple GUI interface
 
-### Changed
-- Initial development and testing
-- Core functionality implementation
-- Basic UI components
-- Database schema design
-
----
-
-## 🔮 **Planned Features**
-
-### **Version 1.1.0**
-- Task categories and priority levels
-- Recurring tasks support
-- Calendar view integration
-- Export/import functionality
-
-### **Version 1.2.0**
-- Cloud synchronization
-- Mobile companion app
-- Advanced analytics
-- Custom notification sounds
-
-### **Version 2.0.0**
-- Multi-platform support (macOS, Linux)
-- Plugin system
-- API integration
-- Team collaboration features
-
----
-
-## 📊 **Release Statistics**
-
-| Version | Release Date | Downloads | Features | Contributors |
-|---------|--------------|-----------|----------|--------------|
-| 1.0.0   | 2024-08-22  | -         | 10+      | 1            |
-| 0.9.0   | 2024-08-21  | -         | 5+       | 1            |
-| 0.8.0   | 2024-08-20  | -         | 4+       | 1            |
-| 0.7.0   | 2024-08-19  | -         | 4+       | 1            |
-| 0.6.0   | 2024-08-18  | -         | 3+       | 1            |
-| 0.5.0   | 2024-08-17  | -         | 2+       | 1            |
-
 ---
 
 ## 📝 **Notes**
 
 - **Breaking Changes**: Marked with ⚠️ in release notes
-- **Deprecations**: Features marked for removal in future versions
 - **Security**: Security-related changes are highlighted
-- **Performance**: Performance improvements are documented
-- **Documentation**: Documentation updates are tracked
-
----
-
-## 🤝 **Contributing to Changelog**
-
-When adding new entries to the changelog:
-
-1. **Follow the format**: Use the established structure
-2. **Be descriptive**: Explain what changed and why
-3. **Categorize changes**: Use appropriate sections (Added, Changed, Fixed, etc.)
-4. **Include version**: Always specify the version number
-5. **Add dates**: Include release dates for each version
-6. **Link issues**: Reference related GitHub issues when applicable
+- **Migration**: v1 databases are automatically migrated on first v2 launch
 
 ---
 
